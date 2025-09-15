@@ -3,11 +3,11 @@
 -----------------------------------------------------------------------
 local function versionCheckPrint(_type, log)
     local color = _type == 'success' and '^2' or '^1'
-    print(('^5[ds-propplacer]%s %s^7'):format(color, log))
+    print(('^5[ds-bricklayer]%s %s^7'):format(color, log))
 end
 
 local function CheckVersion()
-    PerformHttpRequest('https://raw.githubusercontent.com/lekedog/ds-versioncheckers/main/ds-bricklayer/version.txt', function(err, text, headers)
+    PerformHttpRequest('https://raw.githubusercontent.com/lekedog/ds-versioncheckers/refs/heads/main/ds-bricklayer/version.txt', function(err, text, headers)
         local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
 
         if not text then
