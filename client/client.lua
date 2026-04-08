@@ -176,25 +176,29 @@ CreateThread(function()
                     DisableControlAction(0, 0x8FFC75D6, true) -- Shift
                     DisableControlAction(0, 0xD9D0E1C0, true) -- Spacebar
                 end
-                local drop = Config.Locations[closestJob]["DropLocations"][DropLocation].coords
-                local dist = #(coords - drop)
-                if dist < 1.5 then
-                    local speed = GetEntitySpeed(player)
-                    if speed < 1.0 then
-                        DrawText3D(drop.x, drop.y, drop.z, "[G] | Place Brick")
-                    end
-                    if IsControlJustReleased(0, RSGCore.Shared.Keybinds[Config.Key]) then
-                        local success
-                        if not Config.DoMiniGame then
-                            success = true
-                        else
-                            success = lib.skillCheck({{areaSize = 50, speedMultiplier = 0.5}}, {'w', 'a', 's', 'd'})
+                local currentJob = Config.Locations[closestJob]
+                local dropData = currentJob and currentJob["DropLocations"] and DropLocation and currentJob["DropLocations"][DropLocation]
+                if dropData and dropData.coords then
+                    local drop = dropData.coords
+                    local dist = #(coords - drop)
+                    if dist < 1.5 then
+                        local speed = GetEntitySpeed(player)
+                        if speed < 1.0 then
+                            DrawText3D(drop.x, drop.y, drop.z, "[G] | Place Brick")
                         end
-                        if success then
-                            TriggerEvent('ds-bricklayer:DropBrick')
-                        else
-                            SetPedToRagdoll(player, 1000, 1000, 0, 0, 0, 0)
-                            lib.notify({ title = 'Try Again!', description = 'Have you never picked up bricks before?', type = 'error' })
+                        if IsControlJustReleased(0, RSGCore.Shared.Keybinds[Config.Key]) then
+                            local success
+                            if not Config.DoMiniGame then
+                                success = true
+                            else
+                                success = lib.skillCheck({{areaSize = 50, speedMultiplier = 0.5}}, {'w', 'a', 's', 'd'})
+                            end
+                            if success then
+                                TriggerEvent('ds-bricklayer:DropBrick')
+                            else
+                                SetPedToRagdoll(player, 1000, 1000, 0, 0, 0, 0)
+                                lib.notify({ title = 'Try Again!', description = 'Have you never picked up bricks before?', type = 'error' })
+                            end
                         end
                     end
                 end
