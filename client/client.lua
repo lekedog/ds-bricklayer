@@ -258,10 +258,10 @@ RegisterNetEvent('ds-bricklayer:EndJob', function()
 end)
 
 RegisterNetEvent('ds-bricklayer:CollectPaycheck', function()
-    print("Drop Count: "..DropCount)
+    if Config.Prints then
+        print("Drop Count: "..DropCount)
+    end
 
-    TriggerServerEvent('ds-bricklayer:GetDropCount', DropCount)
-    Wait(100)
     if DropCount ~= 0 then
         RSGCore.Functions.TriggerCallback('ds-bricklayer:CheckIfPaycheckCollected', function(hasBeenPaid)
             if hasBeenPaid then
@@ -346,6 +346,7 @@ RegisterNetEvent('ds-bricklayer:DropBrick', function()
             -- Clear animation after progress bar completes
             ClearPedTasks(PlayerPedId())
             DropCount = DropCount + 1
+            TriggerServerEvent('ds-bricklayer:IncrementDrop') -- Notify server of each drop
             if Config.Prints then
                 print("Drop Count: "..DropCount)
             end
